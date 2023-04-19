@@ -108,8 +108,17 @@ ylabel('values');
 hold off
 %%
 %question 2
-[X_estimate3, P_estimate3, ~, ~,VK] = kalmanFilter(Y_k2, x_0, P_0, A, Q, H, R);
+[X_estimate3, P_estimate3, ~, Pred_P3,VK] = kalmanFilter(Y_k2, x_0, P_0, A, Q, H, R);
 autocorr(VK)
+%%
+s=H*Pred_P3(length(Y_k2))*H'+R;
+figure('Position',[300 300 600 400]);hold on;
+plot(1:length(Y_k2),s^(-1/2)*VK);
+yline(3*sqrt(P_estimate3(length(Y_k2))))
+yline(-3*sqrt(P_estimate3(length(Y_k2))))
+xlabel('x');
+ylabel('values');
+hold off
 %% Question2
 
 %2(a)
@@ -183,13 +192,13 @@ SensorData1=SensorData(:,1:2:end);
 %%%witness can also be shown to convince it
 T=0.2;N=1000;
 %Constant Velocity Model
-A_cv=[1 T;0 1];H=[1 0;0 C3];R1=[1 0;0 C3^2*R];Q=[0 0;0 10];x_0=[100;100];P_0=1*eye(2);
-[X_cv, P_cv, ~, ~,VK_cv] = kalmanFilter(SensorData, x_0, P_0, A_cv, Q, H, R1);
+A_cv=[1 T;0 1];H=[1 0;0 C3];R1=[1 0;0 C3^2*R];Q=[0 0;0 1];x_0=[1;1];P_0=100*eye(2);
+[X_cv, P_cv, ~, P_precv,VK_cv] = kalmanFilter(SensorData, x_0, P_0, A_cv, Q, H, R1);
 X_states = genLinearStateSequence(x_0, P_0, A_cv, Q, N);
 %Time Constant Acceleratiion Model
-A_ca=[1 T T^2/2;0 1 T;0 0 1];H_ca=[1 0 0;0 C3 0];Q_ca=[0 0 0;0 0 0;0 0 10];x_0=[100;100;100];P_0=1*eye(3);
+A_ca=[1 T T^2/2;0 1 T;0 0 1];H_ca=[1 0 0;0 C3 0];Q_ca=[0 0 0;0 0 0;0 0 1];x_0=[1;1;1];P_0=100*eye(3);
 R2=[1 0;0 C3^2*R];
-[X_ca, P_ca, ~, ~,VK_ca] = kalmanFilter(SensorData, x_0, P_0, A_ca, Q_ca, H_ca, R2);
+[X_ca, P_ca, ~, P_preca,VK_ca] = kalmanFilter(SensorData, x_0, P_0, A_ca, Q_ca, H_ca, R2);
 X_states_ca = genLinearStateSequence(x_0, P_0, A_ca, Q_ca, N);
 
 
@@ -235,11 +244,50 @@ grid on
 xlabel('time');
 ylabel('values');
 hold off
+%%
 autocorr(VK_cv(1,:))
+% [X_cv, P_cv, ~, P_precv,VK_cv] = kalmanFilter(SensorData, x_0, P_0, A_cv, Q, H, R1);
+s1=H*P_precv(:,:,1000)*H'+R1;
+figure('Position',[300 300 600 400]);hold on;
+S1=s1^(-1/2)*VK_cv
+plot(S1(1,:));
+yline(3*sqrt(P_cv(1,length(SensorData))))
+yline(-3*sqrt(P_cv(1,length(SensorData))))
+xlabel('x');
+ylabel('values');
+hold off
+%%
 autocorr(VK_cv(2,:))
+figure('Position',[300 300 600 400]);hold on;
+S1=s1^(-1/2)*VK_cv
+plot(S1(2,:));
+yline(3*sqrt(P_cv(2,length(SensorData))))
+yline(-3*sqrt(P_cv(2,length(SensorData))))
+xlabel('x');
+ylabel('values');
+hold off
+%%
+% [X_ca, P_ca, ~, P_preca,VK_ca] = kalmanFilter(SensorData, x_0, P_0, A_ca, Q_ca, H_ca, R2);
+s2=H_ca*P_ca(:,:,1000)*H_ca'+R2;
 autocorr(VK_ca(1,:))
+figure('Position',[300 300 600 400]);hold on;
+S2=s2^(-1/2)*VK_ca
+plot(S1(1,:));
+yline(3*sqrt(P_ca(1,length(SensorData))))
+yline(-3*sqrt(P_ca(1,length(SensorData))))
+xlabel('x');
+ylabel('values');
+hold off
+%%
 autocorr(VK_ca(2,:))
-
+figure('Position',[300 300 600 400]);hold on;
+S2=s2^(-1/2)*VK_ca
+plot(S1(2,:));
+yline(3*sqrt(P_ca(2,length(SensorData))))
+yline(-3*sqrt(P_ca(2,length(SensorData))))
+xlabel('x');
+ylabel('values');
+hold off
 
 % 
 % figure('Position',[300 300 600 400]);hold on;

@@ -57,7 +57,7 @@ function plotPostPdf(k, Xk, Wk, xf, Pf, bResample, sigma, ax)
     legend('Particle filter approximation', 'Kalman filter', 'Location', 'southwest')
     title(['p(x_k |  y_{1:k}), k=', num2str(k)])
     hold off;
-    pause()
+    % pause()
 end
 
 

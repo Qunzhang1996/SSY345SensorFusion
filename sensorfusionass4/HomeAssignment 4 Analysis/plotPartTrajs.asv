@@ -15,9 +15,9 @@ function plotPartTrajs(k, Xk, Xkmin1, ~, j)
 %   Wk          [1 x N] Corresponding weights.
 %   j           Index vector such that Xk(:,i) = Xkmin1(:,j(i))
 
-    if (size(Xk,2) <= 100) % At most 50 particles may be plotted
+    if (size(Xk,2) <= 50) % At most 50 particles may be plotted
         for i = 1:size(Xk,2) % loop through all particles
-            plot([k-1 k], [Xkmin1(1,j(i)) Xk(1,i)],'Color',[0.5 0.5 0.5]);
+            plot([k-1 k], [Xkmin1(1,j(i)) Xk(1,i)],'Color','');
             hold on 
         end
         title(['Particle trajectories up to time k=', num2str(k)]);

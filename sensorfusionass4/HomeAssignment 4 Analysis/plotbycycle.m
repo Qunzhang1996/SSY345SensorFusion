@@ -21,10 +21,13 @@ N=length(Y);
             u=isOnRoad(Xp(1,:,m),Xp(2,:,m));
             x_test=reshape(Xp(1,:,m),[length(Xp(1,:,m)),1]);
             y_test=reshape(Xp(2,:,m),[length(Xp(2,:,m)),1]);
+
             covEllipse = sigmaEllipse2D(xfp(1:2,m),Pfp(1:2,1:2,m),3,100);
             plot(covEllipse(1,:),covEllipse(2,:),'black','LineWidth',1);
             fill(covEllipse(1,:),covEllipse(2,:), 'cyan','FaceAlpha', 0.2);
+            
             scatter(x_test.*u,y_test.*u,5);
+            scatter(x_test-x_test.*u,y_test-y_test.*u,5,'black');
         end
     end
 end

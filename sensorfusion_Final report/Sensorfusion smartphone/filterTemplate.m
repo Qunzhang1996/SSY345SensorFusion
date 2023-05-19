@@ -48,7 +48,7 @@ function [xhat, meas] = filterTemplate(calAcc, calGyr, calMag)
     % Makes sure to resources are returned.
     sentinel = onCleanup(@() server.stop());
 
-    server.start();  % Start data reception.
+    server.start(1);  % Start data reception.
 
     % Used for visualization.
     figure(1);

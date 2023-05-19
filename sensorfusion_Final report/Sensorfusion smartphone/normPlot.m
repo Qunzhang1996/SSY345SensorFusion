@@ -13,6 +13,6 @@ function [x,Y]=normPlot(value,mu,variance)
 %   Y           normpdf of Y
 %
 % variance=(X_true(:,k+1)-X_estimate(:,k))^2;
-x=[mu-value:0.1:mu+value];
+x=[mu-value:(value/100):mu+value];
 Y=normpdf(x,mu,sqrt(variance));
 end

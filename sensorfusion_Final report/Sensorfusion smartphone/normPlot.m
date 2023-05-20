@@ -1,4 +1,4 @@
-function [x,Y]=normPlot(value,mu,variance)
+function [x,Y]=normPlot(mu,variance)
 %GENLINEARSTATESEQUENCE generates an N-long sequence of states using a 
 %    Gaussian prior and a linear Gaussian process model
 %
@@ -13,6 +13,6 @@ function [x,Y]=normPlot(value,mu,variance)
 %   Y           normpdf of Y
 %
 % variance=(X_true(:,k+1)-X_estimate(:,k))^2;
-x=[mu-value:(value/100):mu+value];
+x=[mu-3*sqrt(variance):sqrt(variance)/10:mu+3*sqrt(variance)];
 Y=normpdf(x,mu,sqrt(variance));
 end

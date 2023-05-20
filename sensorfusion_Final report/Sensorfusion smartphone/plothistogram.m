@@ -1,9 +1,9 @@
-function plothistogram(data,mu,sigma,value,signal)
+function plothistogram(data,mu,sigma,signal)
 figure('Position',[300 300 600 400]);hold on;
 for i=1:3
     subplot(3,1,i);hold on
     histogram(data(i,:),'Normalization','pdf','FaceColor',[.9 .9 .9]);
-    [x_plote,Ye1]=normPlot(value,mu(i,:),sigma(i,i));
+    [x_plote,Ye1]=normPlot(mu(i,:),sigma(i,i));
     plot(x_plote,Ye1,'LineWidth',2);hold off
     legend('histogram','normpdf')
 end

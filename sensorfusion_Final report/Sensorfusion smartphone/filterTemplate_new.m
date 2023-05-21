@@ -109,7 +109,7 @@ function [xhat, meas] = filterTemplate_new(calAcc, calGyr, calMag)
       if ~any(isnan(mag))  % Mag measurements are available.
           L=0.98*L+0.02*norm(mag);
           % disp(L)
-          if L>0.9*norm(m0) && L<1.1*norm(m0)
+          if L>25 && L<45
               [x, P] = mu_m(x, P, mag, m0, Sigma_mag);
               [x, P] = mu_normalizeQ(x, P);
               ownView.setMagDist(false);

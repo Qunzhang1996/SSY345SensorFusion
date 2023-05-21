@@ -35,7 +35,6 @@ function [xhat, meas] = filterTemplate_new(calAcc, calGyr, calMag)
   Sigma_mag=diag([0.0812144578038627 0.122244652116890 0.0961734187830164]);
   g0=[-0.0698351684120345;0.129599040310337;9.86074277407344];
   m0=[0;35.9880;-6.2037];
-  alpha=0.001;
   L=norm(m0);
   % Current filter state.
   x = [1; 0; 0 ;0];
@@ -87,14 +86,14 @@ function [xhat, meas] = filterTemplate_new(calAcc, calGyr, calMag)
         % Do something
         [x,P] =tu_qw(x, P, gyr, t-t0-meas.t(end), Sigma_gyr);
         [x, P] = mu_normalizeQ(x, P);
-      % else
+      else
       %     % G=(t-t0-meas.t(end))/2*Sq(x);
-      %     P=P*eye(4);
+          P=P*eye(4)+0.01*P;
       end
       acc = data(1, 2:4)';
 
       if ~any(isnan(acc))  % Acc measurements are available.
-          if norm(acc)>0.9*norm(g0) && norm(acc)<1.1*norm(g0)
+          if norm(acc)>0.7*norm(g0) && norm(acc)<1.3*norm(g0)
             [x, P] = mu_g(x, P, acc, Sigma_acc, g0);
             [x, P] = mu_normalizeQ(x, P);
             ownView.setAccDist(false);
@@ -109,7 +108,7 @@ function [xhat, meas] = filterTemplate_new(calAcc, calGyr, calMag)
       if ~any(isnan(mag))  % Mag measurements are available.
           L=0.98*L+0.02*norm(mag);
           % disp(L)
-          if L>25 && L<45
+          if L>20 && L<60
               [x, P] = mu_m(x, P, mag, m0, Sigma_mag);
               [x, P] = mu_normalizeQ(x, P);
               ownView.setMagDist(false);

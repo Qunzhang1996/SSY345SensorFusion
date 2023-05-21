@@ -25,17 +25,18 @@ function [xhat, meas] = filterTemplate_new(calAcc, calGyr, calMag)
   % mu_acc=[-0.0698351684120345;0.129599040310337;9.86074277407344];
   % mu_gyr=[-5.93631948089065e-05; -0.000134828649879018 ;5.45399353542027e-05];
   % mu_mag=[-8.90775941939827;-34.8681023729396;-6.20365672999933];
-  Sigma_gyr= diag([5.25831218863433e-07 2.00191667338357e-06 3.08362917989368e-07]);
-  Sigma_acc=diag([5.37642075936609e-05 4.16257582862943e-05 0.000362015694832598]);
-  g0=[-0.0698351684120345;
-    0.129599040310337;
-    9.86074277407344];
 
   %% Filter settings
   t0 = [];  % Initial time (initialize on first data received)
   nx = 4;   % Assuming that you use q as state variable.
   % Add your filter settings here.
-
+  Sigma_gyr= diag([5.25831218863433e-07 2.00191667338357e-06 3.08362917989368e-07]);
+  Sigma_acc=diag([5.37642075936609e-05 4.16257582862943e-05 0.000362015694832598]);
+  Sigma_mag=diag([0.0812144578038627 0.122244652116890 0.0961734187830164]);
+  g0=[-0.0698351684120345;0.129599040310337;9.86074277407344];
+  m0=[0;35.9880;-6.2037];
+  alpha=0.001;
+  L=norm(m0);
   % Current filter state.
   x = [1; 0; 0 ;0];
   P = eye(nx, nx);
@@ -86,9 +87,9 @@ function [xhat, meas] = filterTemplate_new(calAcc, calGyr, calMag)
         % Do something
         [x,P] =tu_qw(x, P, gyr, t-t0-meas.t(end), Sigma_gyr);
         [x, P] = mu_normalizeQ(x, P);
-      else
-          % G=(t-t0-meas.t(end))/2*Sq(x);
-          P=P*eye(4);
+      % else
+      %     % G=(t-t0-meas.t(end))/2*Sq(x);
+      %     P=P*eye(4);
       end
       acc = data(1, 2:4)';
 
@@ -96,14 +97,25 @@ function [xhat, meas] = filterTemplate_new(calAcc, calGyr, calMag)
           if norm(acc)>0.9*norm(g0) && norm(acc)<1.1*norm(g0)
             [x, P] = mu_g(x, P, acc, Sigma_acc, g0);
             [x, P] = mu_normalizeQ(x, P);
-            accOut = 0;
+            ownView.setAccDist(false);
+            % accOut = 0;
            else
-                accOut = 1;
-           end
+                % accOut = 1;
+                ownView.setAccDist(true);
+           end 
 
       end
       mag = data(1, 8:10)';
       if ~any(isnan(mag))  % Mag measurements are available.
+          L=0.98*L+0.02*norm(mag);
+          % disp(L)
+          if L>0.9*norm(m0) && L<1.1*norm(m0)
+              [x, P] = mu_m(x, P, mag, m0, Sigma_mag);
+              [x, P] = mu_normalizeQ(x, P);
+              ownView.setMagDist(false);
+          else
+              ownView.setMagDist(true);
+          end
         % Do something
       end
 

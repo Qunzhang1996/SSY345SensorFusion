@@ -27,7 +27,9 @@ function [xhat, meas] = filterTemplate_new(calAcc, calGyr, calMag)
   % mu_mag=[-8.90775941939827;-34.8681023729396;-6.20365672999933];
   Sigma_gyr= diag([5.25831218863433e-07 2.00191667338357e-06 3.08362917989368e-07]);
   Sigma_acc=diag([5.37642075936609e-05 4.16257582862943e-05 0.000362015694832598]);
-  g0=9.86074277407344;
+  g0=[-0.0698351684120345;
+    0.129599040310337;
+    9.86074277407344];
 
   %% Filter settings
   t0 = [];  % Initial time (initialize on first data received)
@@ -79,22 +81,27 @@ function [xhat, meas] = filterTemplate_new(calAcc, calGyr, calMag)
         t0 = t;
       end
 
-      acc = data(1, 2:4)';
-      if ~any(isnan(acc))  % Acc measurements are available.
-        [x, P] = mu_g(x, P, acc, Sigma_acc, g0);
-        [x, P] = mu_normalizeQ(x, P);
-
-      end
       gyr = data(1, 5:7)';
       if ~any(isnan(gyr))  % Gyro measurements are available.
         % Do something
         [x,P] =tu_qw(x, P, gyr, t-t0-meas.t(end), Sigma_gyr);
         [x, P] = mu_normalizeQ(x, P);
       else
-          G=data(1,1)/2*Sq(x);
-          P=P+G*Sigma_gyr*G';
+          % G=(t-t0-meas.t(end))/2*Sq(x);
+          P=P*eye(4);
       end
+      acc = data(1, 2:4)';
 
+      if ~any(isnan(acc))  % Acc measurements are available.
+          if norm(acc)>0.9*norm(g0) && norm(acc)<1.1*norm(g0)
+            [x, P] = mu_g(x, P, acc, Sigma_acc, g0);
+            [x, P] = mu_normalizeQ(x, P);
+            accOut = 0;
+           else
+                accOut = 1;
+           end
+
+      end
       mag = data(1, 8:10)';
       if ~any(isnan(mag))  % Mag measurements are available.
         % Do something

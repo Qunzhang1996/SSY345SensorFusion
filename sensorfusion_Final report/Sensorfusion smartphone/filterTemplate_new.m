@@ -93,14 +93,12 @@ function [xhat, meas] = filterTemplate_new(calAcc, calGyr, calMag)
       acc = data(1, 2:4)';
 
       if ~any(isnan(acc))  % Acc measurements are available.
-          if norm(acc)>0.7*norm(g0) && norm(acc)<1.3*norm(g0)
+          if norm(acc)>0.9*norm(g0) && norm(acc)<1.1*norm(g0)
             [x, P] = mu_g(x, P, acc, Sigma_acc, g0);
             [x, P] = mu_normalizeQ(x, P);
             ownView.setAccDist(false);
-            % accOut = 0;
-           else
-                % accOut = 1;
-                ownView.setAccDist(true);
+          else
+            ownView.setAccDist(true);
            end 
 
       end
@@ -108,7 +106,7 @@ function [xhat, meas] = filterTemplate_new(calAcc, calGyr, calMag)
       if ~any(isnan(mag))  % Mag measurements are available.
           L=0.98*L+0.02*norm(mag);
           % disp(L)
-          if L>20 && L<60
+          if L>20 && L<40
               [x, P] = mu_m(x, P, mag, m0, Sigma_mag);
               [x, P] = mu_normalizeQ(x, P);
               ownView.setMagDist(false);

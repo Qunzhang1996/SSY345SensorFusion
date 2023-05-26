@@ -86,8 +86,6 @@ function [xhat, meas] = filterTemplate_new(calAcc, calGyr, calMag)
         % Do something
         [x,P] =tu_qw(x, P, gyr, t-t0-meas.t(end), Sigma_gyr);
         [x, P] = mu_normalizeQ(x, P);
-      else
-        P=P*eye(4);
       end
       acc = data(1, 2:4)';
 

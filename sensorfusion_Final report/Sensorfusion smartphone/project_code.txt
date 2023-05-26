@@ -1,3 +1,50 @@
+[xhat, meas] = filterTemplate();
+
+%%Task2
+
+%filter and away from disturbance
+
+[mu_acc, Sigma_acc] = approxGaussianTransform(meas.acc(:, ~any(isnan(meas.acc), 1)))
+[mu_gyr, Sigma_gyr] = approxGaussianTransform(meas.gyr(:, ~any(isnan(meas.gyr), 1)))
+[mu_mag, Sigma_mag] = approxGaussianTransform(meas.mag(:, ~any(isnan(meas.mag), 1)))
+t1=meas.acc(:, ~any(isnan(meas.acc),1));
+t2=meas.gyr(:, ~any(isnan(meas.gyr),1));
+t3=meas.mag(:, ~any(isnan(meas.mag),1));
+plothistogram(t1,mu_acc,Sigma_acc,t1);
+plothistogram(t2,mu_gyr,Sigma_gyr,t2);
+plothistogram(t3,mu_mag,Sigma_mag,t3);
+
+
+%%Task 3
+
+m0=[0;35.9880;-6.2037];
+norm(m0)
+
+Task 4
+
+m=[-8.90775941939827;
+    -34.8681023729396;
+    -6.20365672999933];
+  m0=[0 sqrt(m(1)^2+m(2)^2) m(3)]'
+
+%%task 11
+
+[xhat1, meas1] = filterTemplate_new();
+% yaw roll pith
+
+euler_est = q2euler(xhat1.x);
+euler_ore = q2euler(meas1.orient);
+figure('Position',[300 300 600 400]);hold on;
+for i=1:3
+    subplot(3,1,i);hold on
+    plot(euler_est(i,:),'color','red','LineWidth',1);
+    plot(euler_ore(i,:),'color','black','LineWidth',1);
+    ylim([-4 4])
+    legend('estimate','Orient')
+end
+
+
+
 function [xhat, meas] = filterTemplate_new(calAcc, calGyr, calMag)
 % FILTERTEMPLATE  Filter template
 %
@@ -148,4 +195,55 @@ function [xhat, meas] = filterTemplate_new(calAcc, calGyr, calMag)
       'Make sure to start streaming from the phone *after*'...
              'running this function!']);
   end
+end
+
+function plothistogram(data,mu,sigma,signal)
+figure('Position',[300 300 600 400]);hold on;
+list={'x','y','z'};
+for i=1:3
+    subplot(3,1,i);hold on
+    histogram(data(i,:),'Normalization','pdf','FaceColor',[.9 .9 .9]);
+    % [x_plote,Ye1]=normPlot(mu(i,:),sigma(i,i));
+    % plot(x_plote,Ye1,'LineWidth',2);hold off
+    title('histogram of axis',list(i))
+    legend('histogram')
+end
+figure('Position',[300 300 600 400]);hold on;
+for j=1:3
+    subplot(3,1,j);
+    plot(signal(j,:),'LineWidth',1);
+    legend('signal')
+    title('signal of axis',list{j})
+end
+end
+
+
+function [x,P] =tu_qw(x, P, omega, T, Rw)
+%here is x=Fx+GVk
+G=T/2*Sq(x);
+F=eye(size(x,1))+T/2*Somega(omega);
+x=F*x;
+P=F*P*F'+G*Rw*G';
+end
+
+
+function [x, P] = mu_m(x, P, mag, m0,Rm)
+    hx=Qq(x)'*m0;
+    [Q0, Q1, Q2, Q3]=dQqdq(x);
+    Hx=[Q0'*m0 Q1'*m0 Q2'*m0 Q3'*m0];
+    S=Hx*P*Hx'+Rm;
+    KK=P*Hx'*inv(S);
+    x=x+KK*(mag-hx);
+    P=P-KK*S*KK';
+end
+
+
+function[x, P] = mu_g(x, P, yacc, Ra, g0)
+    hx=Qq(x)'*g0;
+    [Q0, Q1, Q2, Q3]=dQqdq(x);
+    Hx=[Q0'*g0 Q1'*g0 Q2'*g0 Q3'*g0];
+    S=Hx*P*Hx'+Ra;
+    KK=P*Hx'*inv(S);
+    x=x+KK*(yacc-hx);
+    P=P-KK*S*KK';
 end

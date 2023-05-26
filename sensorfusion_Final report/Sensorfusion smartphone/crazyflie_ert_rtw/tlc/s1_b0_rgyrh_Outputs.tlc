@@ -1,0 +1,190 @@
+%implements s1_b0_rgyrh_Outputs "C"
+
+%function Outputs(block, system) Output
+%assign cfgTxt = ""
+%openfile cfgTxt
+%assign localVarDecl = ""
+%openfile localVarDecl
+
+real_T rtb_Plus1_0[5];
+real_T rtb_Add1[4];
+real_T rtb_Plus1_idx_0;
+real_T rtb_Plus1_idx_1;
+real_T tmp;
+int32_T i;
+int32_T i_0;
+%closefile localVarDecl
+%<SLibCG_TrackEO(6)>\
+%<SLibCG_TrackEO(5)>\
+%<SLibCG_TrackEO(4)>\
+%<SLibCG_TrackEO(3)>\
+%<SLibCG_TrackEO(2)>\
+%<SLibCG_TrackEO(1)>\
+%<SLibCG_TrackEO(0)>\
+%<SLibCG_TrackEI(9)>\
+%<SLibCG_TrackEI(8)>\
+%<SLibCG_TrackEI(7)>\
+%<SLibCG_TrackEI(6)>\
+%<SLibCG_TrackEI(5)>\
+%<SLibCG_TrackEI(4)>\
+/* {S!d74}Sum: '<S1>/Plus1' incorporates:
+ *  Delay: '<S1>/Delay'
+ *  Gain: '<S1>/1 - gamma'
+ *  Gain: '<S1>/Gain'
+ *  Gain: '<S1>/Gain1'
+ *  Gain: '<S1>/gamma'
+ *  Inport: '<Root>/Acc_x'
+ *  Inport: '<Root>/Acc_y'
+ *  Inport: '<Root>/Acc_z'
+ *  Inport: '<Root>/Gyro_x'
+ *  Inport: '<Root>/Gyro_y'
+ *  MATLAB Function: '<S1>/MATLAB Function'
+ *  Sum: '<S1>/Plus'
+ */
+/* MATLAB Function 'Complementary filter/MATLAB Function': '<S2>:1' */
+/* '<S2>:1:2' phi = atan2(u(2),u(3)); */
+/* '<S2>:1:3' theta = atan2(-u(1),sqrt(u(2)^2+u(3)^2)); */
+/* '<S2>:1:4' psi = 0; */
+/* '<S2>:1:5' theta_a = [phi,theta,psi]; */
+/*@>c104*/rtb_Plus1_idx_0/*@>ac3c*/ = (/*@>c0d4*/0.017453292519943295/*@>c2b3*/ * /*@>ea97*/crazyflie_U./*@>f2b9*/Gyro_x/*@>c2af*/ * /*@>c0d3*/0.01/*@>ac53*/ + /*@>ec2b*/crazyflie_DW./*@>f307*/Delay_DSTATE/*@>e98b*/[/*@>e988*/0])/*@>c2ab*/ * /*@>c0d2*/0.98/*@>ac42*/ + /*@>c0d1*/0.020000000000000018/*@>c2a7*/ * /*@>e5dc*/atan2(/*@>ea9c*/crazyflie_U./*@>f2bc*/Acc_y, /*@>eaa1*/crazyflie_U./*@>f2bf*/Acc_z);
+/*@>c110*/rtb_Plus1_idx_1/*@>ac61*/ = (/*@>c0d8*/0.017453292519943295/*@>c2a3*/ * /*@>eaa7*/crazyflie_U./*@>f2c2*/Gyro_y/*@>c29f*/ * /*@>c0d7*/0.01/*@>ac8a*/ + /*@>ec31*/crazyflie_DW./*@>f30a*/Delay_DSTATE/*@>e990*/[/*@>e98d*/1])/*@>c29b*/ * /*@>c0d6*/0.98/*@>ac67*/ + /*@>e5e0*/atan2(-/*@<d03a*//*@>eaac*/crazyflie_U./*@>f2c5*/Acc_x, /*@>e5de*/sqrt(/*@>eab1*/crazyflie_U./*@>f2c8*/Acc_y/*@>d040*/ * /*@>eab6*/crazyflie_U./*@>f2cb*/Acc_y/*@>d03f*/ + /*@>eabb*/crazyflie_U./*@>f2ce*/Acc_z/*@>d045*/ * /*@>eac0*/crazyflie_U./*@>f2d1*/Acc_z))/*@>c28e*/ * /*@>c0d5*/0.020000000000000018;
+/* {S!d76}SignalConversion generated from: '<Root>/Gain3' incorporates:
+ *  Inport: '<Root>/Gyro_x'
+ *  Inport: '<Root>/Gyro_y'
+ *  Inport: '<Root>/Gyro_z'
+ */
+/*@>c0f4*/rtb_Plus1_0/*@>bd10*/[/*@>c0f6*/0]/*@>bd0f*/ = /*@>c11e*/rtb_Plus1_idx_0;
+/*@>c0f7*/rtb_Plus1_0/*@>bd1e*/[/*@>c0f9*/1]/*@>bd1d*/ = /*@>c120*/rtb_Plus1_idx_1;
+/*@>c09b*/rtb_Plus1_0/*@>b2f2*/[/*@>c09d*/2]/*@>b2f9*/ = /*@>eac9*/crazyflie_U./*@>f2d4*/Gyro_x;
+/*@>c09e*/rtb_Plus1_0/*@>b303*/[/*@>c0a0*/3]/*@>b30a*/ = /*@>eacf*/crazyflie_U./*@>f2d7*/Gyro_y;
+/*@>c0a1*/rtb_Plus1_0/*@>b314*/[/*@>c0a3*/4]/*@>b31b*/ = /*@>ead5*/crazyflie_U./*@>f2da*/Gyro_z;
+/*@>b3a6*/for (/*@>f145*/i = /*@>f144*/0; /*@>f14f*/i < /*@>f14d*/4; /*@>f14b*/i/*@>f164*/++) {
+    /* {S!d78}Sum: '<Root>/Add' incorporates:
+ *  Gain: '<Root>/Gain3'
+ */
+    /*@>c0bb*/tmp/*@>b3af*/ = /*@>c0ba*/0.0;
+/*@>b396*/    for (/*@>f156*/i_0 = /*@>f155*/0; /*@>f160*/i_0 < /*@>f15e*/5; /*@>f15c*/i_0/*@>f165*/++) {
+        /*@>c0ac*/tmp/*@>f166*/ += /*@>ec22*/crazyflie_ConstP./*@>f304*/Gain3_Gain/*@>e9aa*/[(/*@>e9a4*/i_0/*@>e9a2*/ << /*@>e9a5*/2)/*@>e9a1*/ + /*@>e9a7*/i]/*@>c2bb*/ * /*@>e9ae*/rtb_Plus1_0/*@>e9b0*/[/*@>e9ad*/i_0];
+    }
+    /* {S!d80}Sum: '<Root>/Add1' incorporates:
+ *  Constant: '<Root>/Constant1'
+ *  Gain: '<Root>/Gain4'
+ *  Sum: '<Root>/Add'
+ */
+    /*@>c0c3*/rtb_Add1/*@>b3e8*/[/*@>c0c1*/i]/*@>b3e9*/ = (0.0/*@>cf73*/ - /*@>cf76*/tmp)/*@>c2b7*/ * /*@>c0df*/445368.67142371729/*@>b3db*/ + /*@>c0de*/20000.0;
+}
+/* {S!d88}Saturate: '<Root>/Saturation' */
+/*@>d207*/if (/*@>e993*/rtb_Add1/*@>e995*/[/*@>e992*/0]/*@>c909*/ > /*@>cc21*/65536.0) {
+    /* {S!d82}DataTypeConversion: '<Root>/ToUint16' */
+    /*@>d20b*/tmp/*@>d20a*/ = /*@>cc27*/65536.0;
+} else /*@>d22f*/if (/*@>e998*/rtb_Add1/*@>e99a*/[/*@>e997*/0]/*@>c906*/ < /*@>cc23*/1.0) {
+    /* {S!d84}DataTypeConversion: '<Root>/ToUint16' */
+    /*@>d233*/tmp/*@>d232*/ = /*@>cc25*/1.0;
+} else {
+    /* {S!d86}DataTypeConversion: '<Root>/ToUint16' */
+    /*@>c91f*/tmp/*@>c910*/ = /*@>e99d*/rtb_Add1/*@>e99f*/[/*@>e99c*/0];
+}
+/* {E!d88}End of Saturate: '<Root>/Saturation' */
+
+/* {S!d94}DataTypeConversion: '<Root>/ToUint16' */
+/*@>d20c*/if (/*@>cf8e*/tmp/*@>cf8c*/ < /*@>cf8f*/65536.0) {
+    /* {S!d90}Outport: '<Root>/Motor_1' */
+    /*@>eb7a*/crazyflie_Y./*@>f2e6*/Motor_1/*@>d20f*/ = /*@>cf90*/(uint16_T)/*@>cf92*/tmp;
+} else {
+    /* {S!d92}Outport: '<Root>/Motor_1' */
+    /*@>eb74*/crazyflie_Y./*@>f2e3*/Motor_1/*@>89f9*/ = /*@>cf93*/MAX_uint16_T;
+}
+/* {S!d102}Saturate: '<Root>/Saturation1' */
+/*@>d211*/if (/*@>e9b3*/rtb_Add1/*@>e9b5*/[/*@>e9b2*/1]/*@>c957*/ > /*@>cc29*/65536.0) {
+    /* {S!d96}DataTypeConversion: '<Root>/ToUint16_1' */
+    /*@>d215*/tmp/*@>d214*/ = /*@>cc2f*/65536.0;
+} else /*@>d234*/if (/*@>e9b8*/rtb_Add1/*@>e9ba*/[/*@>e9b7*/1]/*@>c954*/ < /*@>cc2b*/1.0) {
+    /* {S!d98}DataTypeConversion: '<Root>/ToUint16_1' */
+    /*@>d238*/tmp/*@>d237*/ = /*@>cc2d*/1.0;
+} else {
+    /* {S!d100}DataTypeConversion: '<Root>/ToUint16_1' */
+    /*@>c96d*/tmp/*@>c95e*/ = /*@>e9bd*/rtb_Add1/*@>e9bf*/[/*@>e9bc*/1];
+}
+/* {E!d102}End of Saturate: '<Root>/Saturation1' */
+
+/* {S!d108}DataTypeConversion: '<Root>/ToUint16_1' */
+/*@>d216*/if (/*@>cfab*/tmp/*@>cfa9*/ < /*@>cfac*/65536.0) {
+    /* {S!d104}Outport: '<Root>/Motor_2' */
+    /*@>eb8c*/crazyflie_Y./*@>f2ec*/Motor_2/*@>d219*/ = /*@>cfad*/(uint16_T)/*@>cfaf*/tmp;
+} else {
+    /* {S!d106}Outport: '<Root>/Motor_2' */
+    /*@>eb86*/crazyflie_Y./*@>f2e9*/Motor_2/*@>8a05*/ = /*@>cfb0*/MAX_uint16_T;
+}
+/* {S!d116}Saturate: '<Root>/Saturation2' */
+/*@>d21b*/if (/*@>e9c2*/rtb_Add1/*@>e9c4*/[/*@>e9c1*/2]/*@>c9a5*/ > /*@>cc31*/65536.0) {
+    /* {S!d110}DataTypeConversion: '<Root>/ToUint16_2' */
+    /*@>d21f*/tmp/*@>d21e*/ = /*@>cc37*/65536.0;
+} else /*@>d239*/if (/*@>e9c7*/rtb_Add1/*@>e9c9*/[/*@>e9c6*/2]/*@>c9a2*/ < /*@>cc33*/1.0) {
+    /* {S!d112}DataTypeConversion: '<Root>/ToUint16_2' */
+    /*@>d23d*/tmp/*@>d23c*/ = /*@>cc35*/1.0;
+} else {
+    /* {S!d114}DataTypeConversion: '<Root>/ToUint16_2' */
+    /*@>c9bb*/tmp/*@>c9ac*/ = /*@>e9cc*/rtb_Add1/*@>e9ce*/[/*@>e9cb*/2];
+}
+/* {E!d116}End of Saturate: '<Root>/Saturation2' */
+
+/* {S!d122}DataTypeConversion: '<Root>/ToUint16_2' */
+/*@>d220*/if (/*@>cfc8*/tmp/*@>cfc6*/ < /*@>cfc9*/65536.0) {
+    /* {S!d118}Outport: '<Root>/Motor_3' */
+    /*@>eb9e*/crazyflie_Y./*@>f2f2*/Motor_3/*@>d223*/ = /*@>cfca*/(uint16_T)/*@>cfcc*/tmp;
+} else {
+    /* {S!d120}Outport: '<Root>/Motor_3' */
+    /*@>eb98*/crazyflie_Y./*@>f2ef*/Motor_3/*@>8a11*/ = /*@>cfcd*/MAX_uint16_T;
+}
+/* {S!d130}Saturate: '<Root>/Saturation3' */
+/*@>d225*/if (/*@>e9d1*/rtb_Add1/*@>e9d3*/[/*@>e9d0*/3]/*@>c9f3*/ > /*@>cc39*/65536.0) {
+    /* {S!d124}DataTypeConversion: '<Root>/ToUint16_3' */
+    /*@>d229*/tmp/*@>d228*/ = /*@>cc3f*/65536.0;
+} else /*@>d23e*/if (/*@>e9d6*/rtb_Add1/*@>e9d8*/[/*@>e9d5*/3]/*@>c9f0*/ < /*@>cc3b*/1.0) {
+    /* {S!d126}DataTypeConversion: '<Root>/ToUint16_3' */
+    /*@>d242*/tmp/*@>d241*/ = /*@>cc3d*/1.0;
+} else {
+    /* {S!d128}DataTypeConversion: '<Root>/ToUint16_3' */
+    /*@>ca09*/tmp/*@>c9fa*/ = /*@>e9db*/rtb_Add1/*@>e9dd*/[/*@>e9da*/3];
+}
+/* {E!d130}End of Saturate: '<Root>/Saturation3' */
+
+/* {S!d136}DataTypeConversion: '<Root>/ToUint16_3' */
+/*@>d22a*/if (/*@>cfe5*/tmp/*@>cfe3*/ < /*@>cfe6*/65536.0) {
+    /* {S!d132}Outport: '<Root>/Motor_4' */
+    /*@>ebb0*/crazyflie_Y./*@>f2f8*/Motor_4/*@>d22d*/ = /*@>cfe7*/(uint16_T)/*@>cfe9*/tmp;
+} else {
+    /* {S!d134}Outport: '<Root>/Motor_4' */
+    /*@>ebaa*/crazyflie_Y./*@>f2f5*/Motor_4/*@>8a1d*/ = /*@>cfea*/MAX_uint16_T;
+}
+/* {S!d138}Outport: '<Root>/Log1' */
+/*@>ebb6*/crazyflie_Y./*@>f2fb*/Log1/*@>8a1f*/ = /*@>c114*/rtb_Plus1_idx_0;
+/* {S!d140}Outport: '<Root>/Log2' */
+/*@>ebbc*/crazyflie_Y./*@>f2fe*/Log2/*@>8a21*/ = /*@>c116*/rtb_Plus1_idx_1;
+/* {S!d142}Outport: '<Root>/Log3' incorporates:
+ *  Inport: '<Root>/Gyro_z'
+ */
+/*@>ebc2*/crazyflie_Y./*@>f301*/Log3/*@>8a23*/ = /*@>eb05*/crazyflie_U./*@>f2dd*/Gyro_z;
+/* {S!d144}Update for Delay: '<S1>/Delay' incorporates:
+ *  Gain: '<S1>/Gain'
+ *  Gain: '<S1>/Gain1'
+ *  Gain: '<S1>/gamma'
+ *  Inport: '<Root>/Gyro_z'
+ *  Sum: '<S1>/Plus'
+ */
+/*@>ec37*/crazyflie_DW./*@>f30d*/Delay_DSTATE/*@>bce1*/[/*@>c0ed*/0]/*@>bce0*/ = /*@>c118*/rtb_Plus1_idx_0;
+/*@>ec3d*/crazyflie_DW./*@>f310*/Delay_DSTATE/*@>bcef*/[/*@>c0f0*/1]/*@>bcee*/ = /*@>c11a*/rtb_Plus1_idx_1;
+/*@>ec43*/crazyflie_DW./*@>f313*/Delay_DSTATE/*@>bcfd*/[/*@>c0f3*/2]/*@>bcfc*/ = (/*@>cffa*/0.017453292519943295/*@>cff9*/ * /*@>eb0d*/crazyflie_U./*@>f2e0*/Gyro_z/*@>cff7*/ * /*@>cff8*/0.01/*@>cff6*/ + /*@>ec49*/crazyflie_DW./*@>f316*/Delay_DSTATE/*@>e9e2*/[/*@>e9df*/2])/*@>cff4*/ * /*@>cff5*/0.98;
+%<SLibInsertSolverResetCode()>\
+%closefile cfgTxt
+%<cfgTxt>
+%<LibSetSystemField(system, "CachedOutputLocalVars", localVarDecl)>
+%endfunction
+%function OutputsFcnProtoType(block, system) Output
+%assign fcnProtoType = ""
+%openfile fcnProtoType
+static void Outputs(\
+%assign comma = ""
+%closefile fcnProtoType
+%<SLibCG_SetFcnProtoType(0, 0, fcnProtoType)>
+%endfunction
